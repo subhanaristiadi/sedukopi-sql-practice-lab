@@ -1,43 +1,97 @@
 # Sedukopi SQL Practice Lab
 
-An interactive SQL learning lab based on the Sedukopi dataset. This project follows the deployment pattern used by [Gayanara SQL Practice Lab](https://github.com/subhanaristiadi/gayanara-sql-practice-lab): GitHub Pages for the static frontend, Render for a Flask API, and Neon PostgreSQL for the hosted practice database.
+An interactive, browser-based SQL learning environment built around the Sedukopi dataset. Learners can practice PostgreSQL queries against a hosted Neon database, inspect real query results, validate answers against reference outputs, and track their learning progress locally.
+
+**Live app:** https://subhanaristiadi.github.io/sedukopi-sql-practice-lab/  
+**Source code:** https://github.com/subhanaristiadi/sedukopi-sql-practice-lab
+
+## Project highlights
+
+- **47 SQL exercises** across 21 topics, from SQL fundamentals to more advanced analysis.
+- Business questions with required tables, analytical grain, expected output, and learning notes.
+- PostgreSQL query runner that returns real rows from the hosted database.
+- Answer validation that compares a learner's result with a server-side reference result.
+- Browser-based progress tracking, answer saving, personal notes, and progress import/export.
+- Read-only API design intended for a public practice dataset.
 
 ## Architecture
 
-- **Frontend:** `index.html`, hosted as a GitHub Pages project site.
-- **Backend:** `server.py`, deployed to Render using `render.yaml`.
-- **Database:** PostgreSQL on Neon. Only the dedicated `sedukopi_reader` role is used by the public API.
-- **Progress:** answer text, notes, and completion status stay in that browser's `localStorage`; there are no user accounts or cross-device sync.
+```text
+Learner's browser
+  └── GitHub Pages: static HTML/CSS/JavaScript
+        └── HTTPS API requests
+              └── Render: Flask + Gunicorn API
+                    └── Neon: PostgreSQL database
+```
 
-## Included learning material
+| Layer | Technology | Responsibility |
+|---|---|---|
+| Frontend | HTML, CSS, JavaScript, GitHub Pages | Exercise interface, SQL editor, results, progress UI |
+| Backend | Python, Flask, Gunicorn, SQLGlot, Flask-Limiter, Render | SQL parsing, execution, validation, request limits |
+| Database | PostgreSQL on Neon | Stores the Sedukopi practice tables |
+| Local progress | Browser `localStorage` | Saves completion status, SQL answers, and notes in the current browser |
 
-- 47 sub-exercises across 21 topics.
-- Business prompts, required tables, output columns, analytical grain, limitations, and reference SQL.
-- Query runner with actual rows from PostgreSQL and automatic result validation.
-- Progress save, import, export, and reset in the browser.
-- Revenue analysis uses `orders.total_amount` at order grain. `temporarily_closed` outlets are excluded from the specific ranking exercises. Do not treat line-item revenue and order-level revenue as interchangeable without verifying the metric.
+## Dataset
 
-## Important data note
+The database contains the following supplied Sedukopi tables:
 
-The package was built using the supplied Sedukopi CSVs and project documentation. The CSV headers differ from portions of the earlier schema reference: `staff.csv` contains `monthly_salary` (not `phone`) and `orders.csv` contains the eight columns shown in the dataset file. The Neon seed script uses the **actual supplied CSV headers** and includes the monthly salary field. The user's local PostgreSQL instance is not accessible from this build environment, so the hosted Neon data is a separate copy and was not queried or validated yet.
+| Table | Expected rows |
+|---|---:|
+| `outlets` | 20 |
+| `staff` | 120 |
+| `menu_items` | 80 |
+| `orders` | 5,000 |
+| `order_details` | 8,123 |
 
-Expected supplied CSV counts: outlets 20, staff 120, menu_items 80, orders 5,000, order_details 8,123. `seed_neon.py` checks headers/counts and foreign-key orphan rows before committing. Keep these CSV files local; they are not included in this repository package.
+The Neon seed workflow checks CSV headers and row counts and checks for orphaned foreign keys before committing the seed transaction. The public repository should not contain source CSVs, database passwords, `.env` files, or database connection strings.
 
-## Deploy overview
+### Analytics conventions
 
-Follow [`DEPLOYMENT.md`](DEPLOYMENT.md) in order. In summary:
+- Use `orders.total_amount` for order-level revenue questions unless a business question explicitly defines another metric.
+- Keep order-level and order-detail-level analysis separate to avoid double counting after joins.
+- Exclude `temporarily_closed` outlets only for exercises whose stated business rule requires that exclusion.
+- Do not assume `SUM(order_details.subtotal)` is interchangeable with `SUM(orders.total_amount)` without verifying the metric.
 
-1. Create a new public GitHub repository named `sedukopi-sql-practice-lab` and upload the repository files. Do not upload `.env`, CSVs, passwords, or connection strings.
-2. Create a fresh Neon project/database and run `seed_neon.py` locally against it, using the Neon owner connection string only for initial data loading.
-3. Run `create_reader_role.sql` in Neon SQL Editor, substituting a unique strong password. The role has only `CONNECT`, schema `USAGE`, and table `SELECT` grants.
-4. Create a Render Web Service from the repo using `render.yaml`. Set `DATABASE_URL` to the **reader-role connection string**, not the Neon owner/admin URL.
-5. Enable GitHub Pages from the `main` branch root. Confirm `BACKEND_BASE` in `index.html` matches the Render URL if its actual URL differs from the default.
-6. Verify Render `/health`, then run a query and validation in the page.
+## Features
 
-## API safety controls
+1. **Exercise browser:** search and filter by topic, difficulty, and completion status.
+2. **SQL editor:** submit PostgreSQL `SELECT` queries and inspect returned columns and rows.
+3. **Answer validation:** execute the submitted query and the trusted reference query independently, then compare outputs according to the exercise policy.
+4. **Progress tools:** save answers and notes locally; export/import progress as JSON; reset local progress.
+5. **API safety controls:** accept one SELECT-style query, parse SQL with SQLGlot, run database sessions in read-only mode, verify the hosted database role, and enforce query/result/request limits and per-IP rate limits.
 
-The API accepts one SELECT/SELECT-based CTE, parses PostgreSQL syntax with SQLGlot, uses read-only transactions, enforces the non-superuser/read-only-role guard in hosted mode, and caps rows, output bytes, query time, request size, concurrent executions, and requests per IP. CORS allows the configured frontend origin. These controls reduce risk but are not a guarantee of security for arbitrary SQL; the database role's privileges are the primary boundary. This app is intended for practice data, not private or production databases.
+## Validation performed
 
-## Local development (optional)
+The following functional checks were performed against the deployed application:
 
-Install Python 3.11+ and requirements, copy `.env.example` to `.env`, set local PostgreSQL credentials, and run `python server.py`. For a public Render deployment, use `DATABASE_URL` and never use the `postgres` administrator role.
+- A valid outlet-details query returned 20 rows and 4 columns, and the answer validator reported a match.
+- A query returning only `outlet_id` executed, but validation rejected it because its output did not match the expected columns.
+- A `DELETE FROM outlets ...` test was rejected by the API's SQL validation.
+- After a hard refresh, the browser still showed 1 completed exercise out of 47, confirming local progress persistence in the same browser profile.
+- The Render `/health` endpoint returned `status: ok`, `database: connected`, and database name `neondb` when opened directly.
+
+**Browser note:** a browser/client blocker prevented the frontend's `/health` fetch and produced `ERR_BLOCKED_BY_CLIENT`. The frontend was updated to continue checking `/api/exercises`; when exercises load successfully, it displays `Backend connected (health check unavailable)`. This indicator means the health-check request failed while the exercises API succeeded, not that the health endpoint itself was verified by the frontend.
+
+These are basic functional checks, not a comprehensive security audit.
+
+## Deployment overview
+
+See [`DEPLOYMENT.md`](DEPLOYMENT.md) for the full deployment procedure. The production layout is:
+
+- GitHub Pages serves the frontend from the repository root.
+- Render runs the Flask API from `server.py`.
+- Neon hosts PostgreSQL.
+- Render's `DATABASE_URL` must use the dedicated `sedukopi_reader` role, not the database owner/admin connection string.
+- The reader role should have only the privileges needed to connect and read the required tables.
+
+Never commit `.env`, passwords, connection strings, or source CSVs. Use a separate practice database rather than a private or production database.
+
+## Limitations
+
+- There are no user accounts or cloud-synced progress. Progress is stored in `localStorage` for the current browser profile and may not follow the user to another device or browser.
+- The health-check indicator can report that its check is unavailable if a browser extension blocks `/health`, even while the exercise API remains usable.
+- Functional checks do not replace ongoing dependency updates, monitoring, or a formal security review.
+
+## Skills demonstrated
+
+PostgreSQL, SQL analytics, Python, Flask API development, SQL parsing and validation, relational data loading, database privilege design, API safety controls, GitHub Pages, Render, Neon PostgreSQL, and deployment troubleshooting.
