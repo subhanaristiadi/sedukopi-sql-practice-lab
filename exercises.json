@@ -1,0 +1,1114 @@
+[
+  {
+    "id": "FND-01",
+    "topic": "SQL Fundamentals",
+    "title": "Select outlet details",
+    "difficulty": "Beginner",
+    "business_question": "Return outlet ID, name, city, and status for all outlets.",
+    "required_tables": [
+      "outlets"
+    ],
+    "analytical_grain": "One row per outlet",
+    "expected_output": [
+      "outlet_id",
+      "outlet_name",
+      "city",
+      "status"
+    ],
+    "learning_objectives": [
+      "SQL Fundamentals",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "FND-02",
+    "topic": "SQL Fundamentals",
+    "title": "Filter outlets by province",
+    "difficulty": "Beginner",
+    "business_question": "Show outlets located in a province specified by the dataset; inspect distinct province values first and filter to one exact stored value.",
+    "required_tables": [
+      "outlets"
+    ],
+    "analytical_grain": "One row per matching outlet",
+    "expected_output": [
+      "outlet_id",
+      "name",
+      "province"
+    ],
+    "learning_objectives": [
+      "SQL Fundamentals",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "FND-03",
+    "topic": "SQL Fundamentals",
+    "title": "Distinct order types",
+    "difficulty": "Beginner",
+    "business_question": "List the distinct stored order types.",
+    "required_tables": [
+      "orders"
+    ],
+    "analytical_grain": "One row per distinct order type",
+    "expected_output": [
+      "order_type"
+    ],
+    "learning_objectives": [
+      "SQL Fundamentals",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "FND-04",
+    "topic": "SQL Fundamentals",
+    "title": "Find orders above the average",
+    "difficulty": "Intermediate",
+    "business_question": "Return orders whose total_amount is greater than the overall average order amount.",
+    "required_tables": [
+      "orders"
+    ],
+    "analytical_grain": "One row per order",
+    "expected_output": [
+      "order_id",
+      "order_date",
+      "total_amount"
+    ],
+    "learning_objectives": [
+      "SQL Fundamentals",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "FND-05",
+    "topic": "SQL Fundamentals",
+    "title": "Check NULL order amounts",
+    "difficulty": "Beginner",
+    "business_question": "Count NULL and non-NULL values in orders.total_amount.",
+    "required_tables": [
+      "orders"
+    ],
+    "analytical_grain": "One summary row",
+    "expected_output": [
+      "null_amounts",
+      "populated_amounts"
+    ],
+    "learning_objectives": [
+      "SQL Fundamentals",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "REV-01",
+    "topic": "Outlet Revenue Ranking",
+    "title": "Revenue by eligible outlet",
+    "difficulty": "Beginner",
+    "business_question": "Calculate recorded order revenue per outlet using orders.total_amount. Exclude status exactly equal to temporarily_closed; include eligible outlets with zero orders.",
+    "required_tables": [
+      "orders",
+      "outlets"
+    ],
+    "analytical_grain": "One row per eligible outlet",
+    "expected_output": [
+      "outlet_id",
+      "outlet_name",
+      "city",
+      "status",
+      "revenue"
+    ],
+    "learning_objectives": [
+      "Outlet Revenue Ranking",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "REV-02",
+    "topic": "Outlet Revenue Ranking",
+    "title": "Top five outlets by revenue",
+    "difficulty": "Beginner",
+    "business_question": "Return the five highest-revenue outlets among outlets not marked temporarily_closed.",
+    "required_tables": [
+      "orders",
+      "outlets"
+    ],
+    "analytical_grain": "Up to five rows; one per outlet",
+    "expected_output": [
+      "outlet_id",
+      "outlet_name",
+      "city",
+      "revenue"
+    ],
+    "learning_objectives": [
+      "Outlet Revenue Ranking",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "REV-03",
+    "topic": "Outlet Revenue Ranking",
+    "title": "Lowest-revenue eligible outlets",
+    "difficulty": "Beginner",
+    "business_question": "Rank eligible outlets from lowest to highest revenue. Preserve eligible zero-order outlets.",
+    "required_tables": [
+      "orders",
+      "outlets"
+    ],
+    "analytical_grain": "One row per eligible outlet",
+    "expected_output": [
+      "outlet_id",
+      "outlet_name",
+      "city",
+      "revenue"
+    ],
+    "learning_objectives": [
+      "Outlet Revenue Ranking",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "REV-04",
+    "topic": "Outlet Revenue Ranking",
+    "title": "Revenue rank with window function",
+    "difficulty": "Intermediate",
+    "business_question": "Rank eligible outlets by revenue using a window function. Include zero-order outlets.",
+    "required_tables": [
+      "orders",
+      "outlets"
+    ],
+    "analytical_grain": "One row per eligible outlet",
+    "expected_output": [
+      "outlet_id",
+      "outlet_name",
+      "city",
+      "revenue",
+      "revenue_rank"
+    ],
+    "learning_objectives": [
+      "Outlet Revenue Ranking",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "REV-05",
+    "topic": "Outlet Revenue Ranking",
+    "title": "Compare eligible and temporarily closed outlets",
+    "difficulty": "Intermediate",
+    "business_question": "Summarize outlet counts by stored status, without assuming all non-closed statuses mean operating.",
+    "required_tables": [
+      "outlets"
+    ],
+    "analytical_grain": "One row per stored status",
+    "expected_output": [
+      "status",
+      "outlet_count"
+    ],
+    "learning_objectives": [
+      "Outlet Revenue Ranking",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "MENU-01",
+    "topic": "Menu Best Sellers",
+    "title": "Total quantity sold by menu item",
+    "difficulty": "Beginner",
+    "business_question": "Calculate total sold quantity per menu item using order_details.quantity.",
+    "required_tables": [
+      "order_details",
+      "menu_items"
+    ],
+    "analytical_grain": "One row per menu item with sales",
+    "expected_output": [
+      "item_id",
+      "item_name",
+      "category",
+      "quantity_sold"
+    ],
+    "learning_objectives": [
+      "Menu Best Sellers",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "MENU-02",
+    "topic": "Menu Best Sellers",
+    "title": "Top-selling item in each category",
+    "difficulty": "Intermediate",
+    "business_question": "Find the top-selling item or tied items within each category by quantity sold.",
+    "required_tables": [
+      "order_details",
+      "menu_items"
+    ],
+    "analytical_grain": "One row per top item per category",
+    "expected_output": [
+      "category",
+      "item_name",
+      "quantity_sold"
+    ],
+    "learning_objectives": [
+      "Menu Best Sellers",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "MENU-03",
+    "topic": "Menu Best Sellers",
+    "title": "Menu items with no recorded sales",
+    "difficulty": "Beginner",
+    "business_question": "List menu items that have no matching order-detail rows.",
+    "required_tables": [
+      "menu_items",
+      "order_details"
+    ],
+    "analytical_grain": "One row per unsold menu item",
+    "expected_output": [
+      "item_id",
+      "name",
+      "category"
+    ],
+    "learning_objectives": [
+      "Menu Best Sellers",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "MENU-04",
+    "topic": "Menu Best Sellers",
+    "title": "Sales by menu category",
+    "difficulty": "Beginner",
+    "business_question": "Aggregate quantity sold and number of detail lines by category.",
+    "required_tables": [
+      "menu_items",
+      "order_details"
+    ],
+    "analytical_grain": "One row per category",
+    "expected_output": [
+      "category",
+      "quantity_sold",
+      "detail_lines"
+    ],
+    "learning_objectives": [
+      "Menu Best Sellers",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "MENU-05",
+    "topic": "Menu Best Sellers",
+    "title": "Compare available and unavailable item counts",
+    "difficulty": "Beginner",
+    "business_question": "Count menu items by is_available value; do not assume current availability reflects historical availability.",
+    "required_tables": [
+      "menu_items"
+    ],
+    "analytical_grain": "One row per availability value",
+    "expected_output": [
+      "is_available",
+      "item_count"
+    ],
+    "learning_objectives": [
+      "Menu Best Sellers",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "PEAK-01",
+    "topic": "Peak Hour",
+    "title": "Order volume by hour",
+    "difficulty": "Beginner",
+    "business_question": "Count orders by hour using orders.order_time.",
+    "required_tables": [
+      "orders"
+    ],
+    "analytical_grain": "One row per hour present",
+    "expected_output": [
+      "order_hour",
+      "order_count"
+    ],
+    "learning_objectives": [
+      "Peak Hour",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "PEAK-02",
+    "topic": "Peak Hour",
+    "title": "Top three busiest hours",
+    "difficulty": "Beginner",
+    "business_question": "Return the three hours with the most orders.",
+    "required_tables": [
+      "orders"
+    ],
+    "analytical_grain": "Up to three rows",
+    "expected_output": [
+      "order_hour",
+      "order_count"
+    ],
+    "learning_objectives": [
+      "Peak Hour",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "PEAK-03",
+    "topic": "Peak Hour",
+    "title": "Revenue by hour",
+    "difficulty": "Intermediate",
+    "business_question": "Aggregate recorded order revenue by hour; interpret as revenue distribution, not necessarily customer traffic quality.",
+    "required_tables": [
+      "orders"
+    ],
+    "analytical_grain": "One row per hour present",
+    "expected_output": [
+      "order_hour",
+      "revenue"
+    ],
+    "learning_objectives": [
+      "Peak Hour",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "PEAK-04",
+    "topic": "Peak Hour",
+    "title": "Order count and average amount by hour",
+    "difficulty": "Intermediate",
+    "business_question": "Compare order volume and average order amount for each hour.",
+    "required_tables": [
+      "orders"
+    ],
+    "analytical_grain": "One row per hour present",
+    "expected_output": [
+      "order_hour",
+      "order_count",
+      "average_order_amount"
+    ],
+    "learning_objectives": [
+      "Peak Hour",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "TREND-01",
+    "topic": "Monthly Revenue Trends",
+    "title": "Monthly revenue",
+    "difficulty": "Beginner",
+    "business_question": "Aggregate recorded revenue by calendar month across the available data.",
+    "required_tables": [
+      "orders"
+    ],
+    "analytical_grain": "One row per month with orders",
+    "expected_output": [
+      "month",
+      "revenue"
+    ],
+    "learning_objectives": [
+      "Monthly Revenue Trends",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "TREND-02",
+    "topic": "Monthly Revenue Trends",
+    "title": "Monthly order volume",
+    "difficulty": "Beginner",
+    "business_question": "Count orders by month and inspect whether months have differing volumes.",
+    "required_tables": [
+      "orders"
+    ],
+    "analytical_grain": "One row per month with orders",
+    "expected_output": [
+      "month",
+      "order_count"
+    ],
+    "learning_objectives": [
+      "Monthly Revenue Trends",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "TREND-03",
+    "topic": "Monthly Revenue Trends",
+    "title": "Year-over-year monthly revenue comparison",
+    "difficulty": "Advanced",
+    "business_question": "Compare revenue for the same calendar month across years where data exists; do not assume full-year coverage.",
+    "required_tables": [
+      "orders"
+    ],
+    "analytical_grain": "One row per year-month",
+    "expected_output": [
+      "month",
+      "revenue",
+      "previous_year_revenue"
+    ],
+    "learning_objectives": [
+      "Monthly Revenue Trends",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "TREND-04",
+    "topic": "Monthly Revenue Trends",
+    "title": "Month-over-month revenue change",
+    "difficulty": "Intermediate",
+    "business_question": "Calculate the absolute difference from the prior observed month.",
+    "required_tables": [
+      "orders"
+    ],
+    "analytical_grain": "One row per month with orders",
+    "expected_output": [
+      "month",
+      "revenue",
+      "previous_month_revenue",
+      "revenue_change"
+    ],
+    "learning_objectives": [
+      "Monthly Revenue Trends",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "PAY-01",
+    "topic": "Payment Method Trends",
+    "title": "Order count by payment method",
+    "difficulty": "Beginner",
+    "business_question": "Count orders for each stored payment method.",
+    "required_tables": [
+      "orders"
+    ],
+    "analytical_grain": "One row per payment method",
+    "expected_output": [
+      "payment_method",
+      "order_count"
+    ],
+    "learning_objectives": [
+      "Payment Method Trends",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "PAY-02",
+    "topic": "Payment Method Trends",
+    "title": "Year and payment method order count",
+    "difficulty": "Intermediate",
+    "business_question": "Compare order counts by year and stored payment method.",
+    "required_tables": [
+      "orders"
+    ],
+    "analytical_grain": "One row per year and payment method",
+    "expected_output": [
+      "order_year",
+      "payment_method",
+      "order_count"
+    ],
+    "learning_objectives": [
+      "Payment Method Trends",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "PAY-03",
+    "topic": "Payment Method Trends",
+    "title": "Revenue by payment method",
+    "difficulty": "Beginner",
+    "business_question": "Sum recorded order revenue by payment method.",
+    "required_tables": [
+      "orders"
+    ],
+    "analytical_grain": "One row per payment method",
+    "expected_output": [
+      "payment_method",
+      "revenue"
+    ],
+    "learning_objectives": [
+      "Payment Method Trends",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "PAY-04",
+    "topic": "Payment Method Trends",
+    "title": "Payment method share within each year",
+    "difficulty": "Advanced",
+    "business_question": "Calculate each payment method's percentage of order count within its year.",
+    "required_tables": [
+      "orders"
+    ],
+    "analytical_grain": "One row per year and payment method",
+    "expected_output": [
+      "order_year",
+      "payment_method",
+      "order_count",
+      "pct_of_year_orders"
+    ],
+    "learning_objectives": [
+      "Payment Method Trends",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "AOV-01",
+    "topic": "AOV by Order Type",
+    "title": "AOV and order count by order type",
+    "difficulty": "Intermediate",
+    "business_question": "Calculate average order value as SUM(total_amount) divided by order count; show order count beside AOV.",
+    "required_tables": [
+      "orders"
+    ],
+    "analytical_grain": "One row per order type",
+    "expected_output": [
+      "order_type",
+      "order_count",
+      "aov"
+    ],
+    "learning_objectives": [
+      "AOV by Order Type",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "AOV-02",
+    "topic": "AOV by Order Type",
+    "title": "Highest-AOV order type",
+    "difficulty": "Intermediate",
+    "business_question": "Return the order type or types with the highest average order amount.",
+    "required_tables": [
+      "orders"
+    ],
+    "analytical_grain": "One row per top order type",
+    "expected_output": [
+      "order_type",
+      "order_count",
+      "aov"
+    ],
+    "learning_objectives": [
+      "AOV by Order Type",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "AOV-03",
+    "topic": "AOV by Order Type",
+    "title": "Median order amount by order type",
+    "difficulty": "Advanced",
+    "business_question": "Compare median order amount by type using PostgreSQL percentile_cont.",
+    "required_tables": [
+      "orders"
+    ],
+    "analytical_grain": "One row per order type",
+    "expected_output": [
+      "order_type",
+      "median_order_amount"
+    ],
+    "learning_objectives": [
+      "AOV by Order Type",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "CONTR-01",
+    "topic": "Menu Revenue Contribution",
+    "title": "Menu revenue from order detail subtotals",
+    "difficulty": "Intermediate",
+    "business_question": "Calculate menu-level revenue using order_details.subtotal. Explicitly note this is a detail-level metric and may not equal orders.total_amount.",
+    "required_tables": [
+      "order_details",
+      "menu_items"
+    ],
+    "analytical_grain": "One row per sold menu item",
+    "expected_output": [
+      "item_id",
+      "item_name",
+      "detail_revenue"
+    ],
+    "learning_objectives": [
+      "Menu Revenue Contribution",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "CONTR-02",
+    "topic": "Menu Revenue Contribution",
+    "title": "Percentage contribution of menu revenue",
+    "difficulty": "Intermediate",
+    "business_question": "Calculate each item's share of total order-detail subtotal revenue using the same denominator throughout.",
+    "required_tables": [
+      "order_details",
+      "menu_items"
+    ],
+    "analytical_grain": "One row per sold menu item",
+    "expected_output": [
+      "item_id",
+      "item_name",
+      "detail_revenue",
+      "pct_of_detail_revenue"
+    ],
+    "learning_objectives": [
+      "Menu Revenue Contribution",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "CONTR-03",
+    "topic": "Menu Revenue Contribution",
+    "title": "Cumulative menu revenue contribution",
+    "difficulty": "Advanced",
+    "business_question": "Rank menu items by detail revenue and calculate cumulative share of detail revenue.",
+    "required_tables": [
+      "order_details",
+      "menu_items"
+    ],
+    "analytical_grain": "One row per sold menu item",
+    "expected_output": [
+      "item_name",
+      "detail_revenue",
+      "cumulative_pct"
+    ],
+    "learning_objectives": [
+      "Menu Revenue Contribution",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "CONTR-04",
+    "topic": "Menu Revenue Contribution",
+    "title": "Compare detail subtotal and extended unit price",
+    "difficulty": "Advanced",
+    "business_question": "Compare aggregated detail subtotals with quantity multiplied by unit_price to inspect data consistency.",
+    "required_tables": [
+      "order_details"
+    ],
+    "analytical_grain": "One row per item",
+    "expected_output": [
+      "item_id",
+      "subtotal_sum",
+      "extended_price_sum",
+      "difference"
+    ],
+    "learning_objectives": [
+      "Menu Revenue Contribution",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "ENG-01",
+    "topic": "Menu Engineering",
+    "title": "Gross margin per menu item from menu price and cost",
+    "difficulty": "Intermediate",
+    "business_question": "Calculate listed unit gross margin (price minus cost_price). This is not realized historical profit.",
+    "required_tables": [
+      "menu_items"
+    ],
+    "analytical_grain": "One row per menu item",
+    "expected_output": [
+      "item_id",
+      "name",
+      "price",
+      "cost_price",
+      "unit_margin"
+    ],
+    "learning_objectives": [
+      "Menu Engineering",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "ENG-02",
+    "topic": "Menu Engineering",
+    "title": "Quantity sold and listed unit margin",
+    "difficulty": "Advanced",
+    "business_question": "Combine sales quantity and listed unit margin. Treat quantity times listed margin as an estimate, not verified realized profit.",
+    "required_tables": [
+      "menu_items",
+      "order_details"
+    ],
+    "analytical_grain": "One row per sold menu item",
+    "expected_output": [
+      "item_id",
+      "name",
+      "quantity_sold",
+      "unit_margin",
+      "estimated_margin"
+    ],
+    "learning_objectives": [
+      "Menu Engineering",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "ENG-03",
+    "topic": "Menu Engineering",
+    "title": "Classify items by median sales quantity",
+    "difficulty": "Advanced",
+    "business_question": "Create an explicitly data-relative popularity classification using median quantity sold among items with sales. This is not a universal menu-engineering threshold.",
+    "required_tables": [
+      "menu_items",
+      "order_details"
+    ],
+    "analytical_grain": "One row per sold menu item",
+    "expected_output": [
+      "item_id",
+      "name",
+      "quantity_sold",
+      "popularity_segment"
+    ],
+    "learning_objectives": [
+      "Menu Engineering",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "CROSS-01",
+    "topic": "Cross-Sell",
+    "title": "Count unique item pairs in the same order",
+    "difficulty": "Advanced",
+    "business_question": "Count unique unordered pairs of distinct menu items appearing in the same order. Each item pair should occur once per order even if quantity exceeds one.",
+    "required_tables": [
+      "order_details",
+      "menu_items"
+    ],
+    "analytical_grain": "One row per unordered item pair",
+    "expected_output": [
+      "item_a",
+      "item_b",
+      "orders_together"
+    ],
+    "learning_objectives": [
+      "Cross-Sell",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "CROSS-02",
+    "topic": "Cross-Sell",
+    "title": "Show names for most common item pairs",
+    "difficulty": "Advanced",
+    "business_question": "Return the ten most frequently co-purchased unique menu item pairs with readable item names.",
+    "required_tables": [
+      "order_details",
+      "menu_items"
+    ],
+    "analytical_grain": "Up to ten rows per unique item pair",
+    "expected_output": [
+      "item_a",
+      "item_b",
+      "orders_together"
+    ],
+    "learning_objectives": [
+      "Cross-Sell",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "EFF-01",
+    "topic": "Outlet and Staff Efficiency",
+    "title": "Staff count by outlet and status",
+    "difficulty": "Intermediate",
+    "business_question": "Count staff by outlet and stored staff status. Do not assume a status means active without inspecting values.",
+    "required_tables": [
+      "staff",
+      "outlets"
+    ],
+    "analytical_grain": "One row per outlet and staff status",
+    "expected_output": [
+      "outlet_name",
+      "staff_status",
+      "staff_count"
+    ],
+    "learning_objectives": [
+      "Outlet and Staff Efficiency",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "EFF-02",
+    "topic": "Outlet and Staff Efficiency",
+    "title": "Revenue per recorded staff member",
+    "difficulty": "Advanced",
+    "business_question": "Calculate outlet revenue divided by the count of staff records at that outlet. This is a crude ratio, not a complete efficiency measure; staffing period/status needs interpretation.",
+    "required_tables": [
+      "orders",
+      "outlets",
+      "staff"
+    ],
+    "analytical_grain": "One row per eligible outlet",
+    "expected_output": [
+      "outlet_name",
+      "revenue",
+      "staff_count",
+      "revenue_per_staff_record"
+    ],
+    "learning_objectives": [
+      "Outlet and Staff Efficiency",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "EFF-03",
+    "topic": "Outlet and Staff Efficiency",
+    "title": "Order volume by outlet and staff role",
+    "difficulty": "Intermediate",
+    "business_question": "Count orders attributed to staff by role and outlet. Interpret as recorded order attribution, not a productivity measure without scheduling data.",
+    "required_tables": [
+      "orders",
+      "staff",
+      "outlets"
+    ],
+    "analytical_grain": "One row per outlet and staff role",
+    "expected_output": [
+      "outlet_name",
+      "role",
+      "order_count"
+    ],
+    "learning_objectives": [
+      "Outlet and Staff Efficiency",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "DQ-01",
+    "topic": "Data Quality",
+    "title": "Check order total NULLs and negatives",
+    "difficulty": "Intermediate",
+    "business_question": "Summarize NULL, negative, zero, and positive total_amount records.",
+    "required_tables": [
+      "orders"
+    ],
+    "analytical_grain": "One summary row",
+    "expected_output": [
+      "null_amounts",
+      "negative_amounts",
+      "zero_amounts",
+      "positive_amounts"
+    ],
+    "learning_objectives": [
+      "Data Quality",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "DQ-02",
+    "topic": "Data Quality",
+    "title": "Check duplicate order-detail keys",
+    "difficulty": "Intermediate",
+    "business_question": "Find order_details detail_id values that appear more than once.",
+    "required_tables": [
+      "order_details"
+    ],
+    "analytical_grain": "One row per duplicated key; possibly empty",
+    "expected_output": [
+      "detail_id",
+      "occurrences"
+    ],
+    "learning_objectives": [
+      "Data Quality",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "DQ-03",
+    "topic": "Data Quality",
+    "title": "Compare order and detail revenue totals",
+    "difficulty": "Advanced",
+    "business_question": "Compare the sum of orders.total_amount with sum of order_details.subtotal. This is a diagnostic only; do not assume the two definitions are interchangeable.",
+    "required_tables": [
+      "orders",
+      "order_details"
+    ],
+    "analytical_grain": "One summary row",
+    "expected_output": [
+      "order_revenue",
+      "detail_subtotal_revenue",
+      "difference"
+    ],
+    "learning_objectives": [
+      "Data Quality",
+      "SQL result interpretation",
+      "Check the stated grain and limitations"
+    ],
+    "limitations": "Reference query is a proposed baseline. Verify it against the live PostgreSQL schema before treating the exercise as validated.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "SAL-01",
+    "topic": "Staff Salary Analysis",
+    "title": "Monthly salary by staff role",
+    "difficulty": "Beginner",
+    "business_question": "Compare the recorded monthly salary by staff role using the monthly_salary column present in staff.csv. Show staff count and average monthly salary per role.",
+    "required_tables": [
+      "staff"
+    ],
+    "analytical_grain": "One row per staff role",
+    "expected_output": [
+      "role",
+      "staff_count",
+      "average_monthly_salary"
+    ],
+    "learning_objectives": [
+      "GROUP BY",
+      "COUNT",
+      "AVG",
+      "Interpreting salary metrics"
+    ],
+    "limitations": "Requires staff.monthly_salary to exist in the live PostgreSQL table. The CSV contains this column, but the database schema must be verified before running.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  },
+  {
+    "id": "SAL-02",
+    "topic": "Staff Salary Analysis",
+    "title": "Monthly salary distribution by outlet",
+    "difficulty": "Intermediate",
+    "business_question": "For each outlet, calculate the number of staff records and average recorded monthly salary. Preserve outlets without matching staff records.",
+    "required_tables": [
+      "staff",
+      "outlets"
+    ],
+    "analytical_grain": "One row per outlet",
+    "expected_output": [
+      "outlet_id",
+      "outlet_name",
+      "staff_count",
+      "average_monthly_salary"
+    ],
+    "learning_objectives": [
+      "LEFT JOIN",
+      "GROUP BY",
+      "COUNT",
+      "AVG",
+      "NULL handling"
+    ],
+    "limitations": "Requires staff.monthly_salary to exist in the live PostgreSQL table. An average of NULL salaries remains NULL; do not treat missing salary as zero without a documented rule.",
+    "validation_policy": "Compare returned column names and ordered columns; compare row multisets unless row ordering is explicitly part of the exercise."
+  }
+]

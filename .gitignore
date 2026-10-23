@@ -1,0 +1,14 @@
+# Secrets and local configuration
+.env
+.env.*.local
+!.env.example
+*.csv
+*.zip
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+*.log
+reference_results/

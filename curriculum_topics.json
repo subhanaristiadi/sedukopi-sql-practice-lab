@@ -1,0 +1,196 @@
+[
+  {
+    "id": "CUR-01",
+    "title": "SELECT and column projection",
+    "exercise_ids": [
+      "FND-01"
+    ],
+    "objective": "Choose only the columns required by the question."
+  },
+  {
+    "id": "CUR-02",
+    "title": "WHERE filtering",
+    "exercise_ids": [
+      "FND-02",
+      "REV-01"
+    ],
+    "objective": "Filter records using exact stored values and documented population rules."
+  },
+  {
+    "id": "CUR-03",
+    "title": "ORDER BY and LIMIT",
+    "exercise_ids": [
+      "REV-02",
+      "REV-03",
+      "PEAK-02"
+    ],
+    "objective": "Sort results and return Top-N records."
+  },
+  {
+    "id": "CUR-04",
+    "title": "DISTINCT",
+    "exercise_ids": [
+      "FND-03"
+    ],
+    "objective": "Return unique stored categories without inventing normalization."
+  },
+  {
+    "id": "CUR-05",
+    "title": "NULL handling",
+    "exercise_ids": [
+      "FND-05",
+      "DQ-01"
+    ],
+    "objective": "Distinguish NULL from zero and non-NULL values."
+  },
+  {
+    "id": "CUR-06",
+    "title": "CASE expressions",
+    "exercise_ids": [
+      "ENG-03"
+    ],
+    "objective": "Create an explicit classification from a documented threshold."
+  },
+  {
+    "id": "CUR-07",
+    "title": "COALESCE and zero-order outlets",
+    "exercise_ids": [
+      "REV-01",
+      "REV-03"
+    ],
+    "objective": "Keep eligible outlets without orders and represent missing aggregate values deliberately."
+  },
+  {
+    "id": "CUR-08",
+    "title": "Aggregate functions",
+    "exercise_ids": [
+      "MENU-01",
+      "PAY-01",
+      "AOV-01"
+    ],
+    "objective": "Use SUM, COUNT, and AVG at the intended grain."
+  },
+  {
+    "id": "CUR-09",
+    "title": "GROUP BY",
+    "exercise_ids": [
+      "MENU-04",
+      "PEAK-01",
+      "TREND-01"
+    ],
+    "objective": "Aggregate records by category, hour, or month."
+  },
+  {
+    "id": "CUR-10",
+    "title": "HAVING and duplicate checks",
+    "exercise_ids": [
+      "DQ-02"
+    ],
+    "objective": "Filter grouped results to identify repeated keys."
+  },
+  {
+    "id": "CUR-11",
+    "title": "Date and time functions",
+    "exercise_ids": [
+      "PEAK-01",
+      "TREND-01",
+      "PAY-02"
+    ],
+    "objective": "Extract hour, year, and calendar month."
+  },
+  {
+    "id": "CUR-12",
+    "title": "String functions and stored labels",
+    "exercise_ids": [
+      "FND-02",
+      "PAY-01"
+    ],
+    "objective": "Inspect and filter stored text values without silent recategorization."
+  },
+  {
+    "id": "CUR-13",
+    "title": "INNER JOIN",
+    "exercise_ids": [
+      "MENU-01",
+      "CONTR-01"
+    ],
+    "objective": "Combine related records when matching rows are required."
+  },
+  {
+    "id": "CUR-14",
+    "title": "LEFT JOIN and unmatched rows",
+    "exercise_ids": [
+      "REV-01",
+      "MENU-03"
+    ],
+    "objective": "Preserve parent rows with no matching child records."
+  },
+  {
+    "id": "CUR-15",
+    "title": "Join cardinality and double counting",
+    "exercise_ids": [
+      "DQ-03",
+      "EFF-02"
+    ],
+    "objective": "Separate order-level and detail-level metrics."
+  },
+  {
+    "id": "CUR-16",
+    "title": "Common Table Expressions",
+    "exercise_ids": [
+      "REV-04",
+      "TREND-04",
+      "CONTR-03"
+    ],
+    "objective": "Break multi-stage analysis into named query steps."
+  },
+  {
+    "id": "CUR-17",
+    "title": "Subqueries",
+    "exercise_ids": [
+      "FND-04",
+      "FND-02"
+    ],
+    "objective": "Use a query result as a filter or scalar input."
+  },
+  {
+    "id": "CUR-18",
+    "title": "Window functions and ranking",
+    "exercise_ids": [
+      "REV-04",
+      "MENU-02",
+      "AOV-02"
+    ],
+    "objective": "Rank rows while retaining individual result rows."
+  },
+  {
+    "id": "CUR-19",
+    "title": "Percentages and running totals",
+    "exercise_ids": [
+      "PAY-04",
+      "CONTR-02",
+      "CONTR-03"
+    ],
+    "objective": "Calculate within-group share and cumulative contribution."
+  },
+  {
+    "id": "CUR-20",
+    "title": "Cross-sell pairs and analytical validation",
+    "exercise_ids": [
+      "CROSS-01",
+      "CROSS-02",
+      "DQ-01",
+      "DQ-03"
+    ],
+    "objective": "Count unique item combinations and validate metric consistency."
+  },
+  {
+    "id": "CUR-21",
+    "title": "Staff salary aggregation",
+    "exercise_ids": [
+      "SAL-01",
+      "SAL-02"
+    ],
+    "objective": "Aggregate the CSV-provided monthly_salary field by role and outlet after verifying the live PostgreSQL schema."
+  }
+]

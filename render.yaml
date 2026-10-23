@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: sedukopi-sql-practice-lab-api
+    runtime: python
+    region: singapore
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn server:app --bind 0.0.0.0:$PORT --workers 1 --threads 4 --timeout 35
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: DATABASE_URL
+        sync: false
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://subhanaristiadi.github.io
+      - key: REQUIRE_NON_SUPERUSER
+        value: "true"
+      - key: SEDUKOPI_MAX_ROWS
+        value: "500"
+      - key: SEDUKOPI_MAX_RESULT_BYTES
+        value: "1000000"
+      - key: SEDUKOPI_QUERY_TIMEOUT_MS
+        value: "10000"
+      - key: LOCK_TIMEOUT_MS
+        value: "2000"

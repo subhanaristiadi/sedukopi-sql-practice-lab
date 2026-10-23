@@ -1,0 +1,331 @@
+{
+  "FND-01": {
+    "sql": "SELECT outlet_id, name AS outlet_name, city, status FROM outlets ORDER BY outlet_id;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "FND-02": {
+    "sql": "SELECT outlet_id, name, province FROM outlets WHERE province = (SELECT province FROM outlets WHERE province IS NOT NULL GROUP BY province ORDER BY province LIMIT 1) ORDER BY name;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "FND-03": {
+    "sql": "SELECT DISTINCT order_type FROM orders ORDER BY order_type;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "FND-04": {
+    "sql": "SELECT order_id, order_date, total_amount FROM orders WHERE total_amount > (SELECT AVG(total_amount) FROM orders) ORDER BY total_amount DESC;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "FND-05": {
+    "sql": "SELECT COUNT(*) FILTER (WHERE total_amount IS NULL) AS null_amounts, COUNT(*) FILTER (WHERE total_amount IS NOT NULL) AS populated_amounts FROM orders;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "REV-01": {
+    "sql": "SELECT ot.outlet_id, ot.name AS outlet_name, ot.city, ot.status, COALESCE(SUM(o.total_amount), 0) AS revenue FROM outlets ot LEFT JOIN orders o ON o.outlet_id = ot.outlet_id WHERE ot.status <> 'temporarily_closed' GROUP BY ot.outlet_id, ot.name, ot.city, ot.status ORDER BY revenue DESC, outlet_name;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "REV-02": {
+    "sql": "SELECT ot.outlet_id, ot.name AS outlet_name, ot.city, SUM(o.total_amount) AS revenue FROM outlets ot JOIN orders o ON o.outlet_id = ot.outlet_id WHERE ot.status <> 'temporarily_closed' GROUP BY ot.outlet_id, ot.name, ot.city ORDER BY revenue DESC, outlet_name LIMIT 5;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "REV-03": {
+    "sql": "SELECT ot.outlet_id, ot.name AS outlet_name, ot.city, COALESCE(SUM(o.total_amount), 0) AS revenue FROM outlets ot LEFT JOIN orders o ON o.outlet_id = ot.outlet_id WHERE ot.status <> 'temporarily_closed' GROUP BY ot.outlet_id, ot.name, ot.city ORDER BY revenue ASC, outlet_name;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "REV-04": {
+    "sql": "WITH outlet_revenue AS (SELECT ot.outlet_id, ot.name AS outlet_name, ot.city, COALESCE(SUM(o.total_amount), 0) AS revenue FROM outlets ot LEFT JOIN orders o ON o.outlet_id = ot.outlet_id WHERE ot.status <> 'temporarily_closed' GROUP BY ot.outlet_id, ot.name, ot.city) SELECT outlet_id, outlet_name, city, revenue, RANK() OVER (ORDER BY revenue DESC) AS revenue_rank FROM outlet_revenue ORDER BY revenue_rank, outlet_name;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "REV-05": {
+    "sql": "SELECT status, COUNT(*) AS outlet_count FROM outlets GROUP BY status ORDER BY status;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "MENU-01": {
+    "sql": "SELECT m.item_id, m.name AS item_name, m.category, SUM(d.quantity) AS quantity_sold FROM menu_items m JOIN order_details d ON d.item_id = m.item_id GROUP BY m.item_id, m.name, m.category ORDER BY quantity_sold DESC, item_name;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "MENU-02": {
+    "sql": "WITH sales AS (SELECT m.category, m.item_id, m.name AS item_name, SUM(d.quantity) AS quantity_sold FROM menu_items m JOIN order_details d ON d.item_id = m.item_id GROUP BY m.category, m.item_id, m.name), ranked AS (SELECT *, RANK() OVER (PARTITION BY category ORDER BY quantity_sold DESC) AS category_rank FROM sales) SELECT category, item_name, quantity_sold FROM ranked WHERE category_rank = 1 ORDER BY category, item_name;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "MENU-03": {
+    "sql": "SELECT m.item_id, m.name, m.category FROM menu_items m LEFT JOIN order_details d ON d.item_id = m.item_id WHERE d.item_id IS NULL ORDER BY m.category, m.name;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "MENU-04": {
+    "sql": "SELECT m.category, SUM(d.quantity) AS quantity_sold, COUNT(*) AS detail_lines FROM menu_items m JOIN order_details d ON d.item_id = m.item_id GROUP BY m.category ORDER BY quantity_sold DESC;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "MENU-05": {
+    "sql": "SELECT is_available, COUNT(*) AS item_count FROM menu_items GROUP BY is_available ORDER BY is_available;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "PEAK-01": {
+    "sql": "SELECT EXTRACT(HOUR FROM order_time)::INTEGER AS order_hour, COUNT(*) AS order_count FROM orders GROUP BY EXTRACT(HOUR FROM order_time) ORDER BY order_hour;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "PEAK-02": {
+    "sql": "SELECT EXTRACT(HOUR FROM order_time)::INTEGER AS order_hour, COUNT(*) AS order_count FROM orders GROUP BY EXTRACT(HOUR FROM order_time) ORDER BY order_count DESC, order_hour LIMIT 3;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "PEAK-03": {
+    "sql": "SELECT EXTRACT(HOUR FROM order_time)::INTEGER AS order_hour, SUM(total_amount) AS revenue FROM orders GROUP BY EXTRACT(HOUR FROM order_time) ORDER BY order_hour;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "PEAK-04": {
+    "sql": "SELECT EXTRACT(HOUR FROM order_time)::INTEGER AS order_hour, COUNT(*) AS order_count, AVG(total_amount) AS average_order_amount FROM orders GROUP BY EXTRACT(HOUR FROM order_time) ORDER BY order_hour;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "TREND-01": {
+    "sql": "SELECT DATE_TRUNC('month', order_date)::DATE AS month, SUM(total_amount) AS revenue FROM orders GROUP BY DATE_TRUNC('month', order_date) ORDER BY month;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "TREND-02": {
+    "sql": "SELECT DATE_TRUNC('month', order_date)::DATE AS month, COUNT(*) AS order_count FROM orders GROUP BY DATE_TRUNC('month', order_date) ORDER BY month;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "TREND-03": {
+    "sql": "WITH monthly AS (SELECT DATE_TRUNC('month', order_date)::DATE AS month, SUM(total_amount) AS revenue FROM orders GROUP BY DATE_TRUNC('month', order_date)) SELECT month, revenue, LAG(revenue, 12) OVER (ORDER BY month) AS previous_year_revenue FROM monthly ORDER BY month;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "TREND-04": {
+    "sql": "WITH monthly AS (SELECT DATE_TRUNC('month', order_date)::DATE AS month, SUM(total_amount) AS revenue FROM orders GROUP BY DATE_TRUNC('month', order_date)) SELECT month, revenue, LAG(revenue) OVER (ORDER BY month) AS previous_month_revenue, revenue - LAG(revenue) OVER (ORDER BY month) AS revenue_change FROM monthly ORDER BY month;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "PAY-01": {
+    "sql": "SELECT payment_method, COUNT(*) AS order_count FROM orders GROUP BY payment_method ORDER BY order_count DESC, payment_method;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "PAY-02": {
+    "sql": "SELECT EXTRACT(YEAR FROM order_date)::INTEGER AS order_year, payment_method, COUNT(*) AS order_count FROM orders GROUP BY EXTRACT(YEAR FROM order_date), payment_method ORDER BY order_year, payment_method;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "PAY-03": {
+    "sql": "SELECT payment_method, SUM(total_amount) AS revenue FROM orders GROUP BY payment_method ORDER BY revenue DESC;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "PAY-04": {
+    "sql": "WITH counts AS (SELECT EXTRACT(YEAR FROM order_date)::INTEGER AS order_year, payment_method, COUNT(*) AS order_count FROM orders GROUP BY EXTRACT(YEAR FROM order_date), payment_method) SELECT order_year, payment_method, order_count, ROUND(100.0 * order_count / SUM(order_count) OVER (PARTITION BY order_year), 2) AS pct_of_year_orders FROM counts ORDER BY order_year, payment_method;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "AOV-01": {
+    "sql": "SELECT order_type, COUNT(*) AS order_count, AVG(total_amount) AS aov FROM orders GROUP BY order_type ORDER BY aov DESC;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "AOV-02": {
+    "sql": "WITH a AS (SELECT order_type, COUNT(*) AS order_count, AVG(total_amount) AS aov FROM orders GROUP BY order_type), r AS (SELECT *, RANK() OVER (ORDER BY aov DESC) AS rnk FROM a) SELECT order_type, order_count, aov FROM r WHERE rnk = 1 ORDER BY order_type;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "AOV-03": {
+    "sql": "SELECT order_type, PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY total_amount) AS median_order_amount FROM orders GROUP BY order_type ORDER BY median_order_amount DESC;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "CONTR-01": {
+    "sql": "SELECT m.item_id, m.name AS item_name, SUM(d.subtotal) AS detail_revenue FROM order_details d JOIN menu_items m ON m.item_id = d.item_id GROUP BY m.item_id, m.name ORDER BY detail_revenue DESC;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "CONTR-02": {
+    "sql": "WITH item_sales AS (SELECT m.item_id, m.name AS item_name, SUM(d.subtotal) AS detail_revenue FROM order_details d JOIN menu_items m ON m.item_id = d.item_id GROUP BY m.item_id, m.name) SELECT item_id, item_name, detail_revenue, ROUND(100.0 * detail_revenue / SUM(detail_revenue) OVER (), 2) AS pct_of_detail_revenue FROM item_sales ORDER BY detail_revenue DESC;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "CONTR-03": {
+    "sql": "WITH item_sales AS (SELECT m.item_id, m.name AS item_name, SUM(d.subtotal) AS detail_revenue FROM order_details d JOIN menu_items m ON m.item_id = d.item_id GROUP BY m.item_id, m.name), ranked AS (SELECT *, SUM(detail_revenue) OVER (ORDER BY detail_revenue DESC, item_id ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cumulative_revenue, SUM(detail_revenue) OVER () AS total_revenue FROM item_sales) SELECT item_name, detail_revenue, ROUND(100.0 * cumulative_revenue / NULLIF(total_revenue, 0), 2) AS cumulative_pct FROM ranked ORDER BY detail_revenue DESC, item_name;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "CONTR-04": {
+    "sql": "SELECT item_id, SUM(subtotal) AS subtotal_sum, SUM(quantity * unit_price) AS extended_price_sum, SUM(subtotal) - SUM(quantity * unit_price) AS difference FROM order_details GROUP BY item_id ORDER BY ABS(SUM(subtotal) - SUM(quantity * unit_price)) DESC;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "ENG-01": {
+    "sql": "SELECT item_id, name, price, cost_price, price - cost_price AS unit_margin FROM menu_items ORDER BY unit_margin DESC;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "ENG-02": {
+    "sql": "WITH q AS (SELECT item_id, SUM(quantity) AS quantity_sold FROM order_details GROUP BY item_id) SELECT m.item_id, m.name, q.quantity_sold, m.price - m.cost_price AS unit_margin, q.quantity_sold * (m.price - m.cost_price) AS estimated_margin FROM menu_items m JOIN q ON q.item_id = m.item_id ORDER BY estimated_margin DESC;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "ENG-03": {
+    "sql": "WITH q AS (SELECT m.item_id, m.name, SUM(d.quantity) AS quantity_sold FROM menu_items m JOIN order_details d ON d.item_id = m.item_id GROUP BY m.item_id, m.name), med AS (SELECT PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY quantity_sold) AS median_qty FROM q) SELECT q.item_id, q.name, q.quantity_sold, CASE WHEN q.quantity_sold >= med.median_qty THEN 'At or above median' ELSE 'Below median' END AS popularity_segment FROM q CROSS JOIN med ORDER BY q.quantity_sold DESC;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "CROSS-01": {
+    "sql": "WITH order_items AS (SELECT DISTINCT order_id, item_id FROM order_details) SELECT a.item_id AS item_a, b.item_id AS item_b, COUNT(*) AS orders_together FROM order_items a JOIN order_items b ON a.order_id = b.order_id AND a.item_id < b.item_id GROUP BY a.item_id, b.item_id ORDER BY orders_together DESC, item_a, item_b;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "CROSS-02": {
+    "sql": "WITH order_items AS (SELECT DISTINCT order_id, item_id FROM order_details), pairs AS (SELECT a.item_id AS id_a, b.item_id AS id_b, COUNT(*) AS orders_together FROM order_items a JOIN order_items b ON a.order_id = b.order_id AND a.item_id < b.item_id GROUP BY a.item_id, b.item_id) SELECT ma.name AS item_a, mb.name AS item_b, p.orders_together FROM pairs p JOIN menu_items ma ON ma.item_id = p.id_a JOIN menu_items mb ON mb.item_id = p.id_b ORDER BY p.orders_together DESC, item_a, item_b LIMIT 10;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "EFF-01": {
+    "sql": "SELECT ot.name AS outlet_name, s.status AS staff_status, COUNT(*) AS staff_count FROM staff s JOIN outlets ot ON ot.outlet_id = s.outlet_id GROUP BY ot.name, s.status ORDER BY outlet_name, staff_status;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "EFF-02": {
+    "sql": "WITH r AS (SELECT ot.outlet_id, ot.name AS outlet_name, COALESCE(SUM(o.total_amount), 0) AS revenue FROM outlets ot LEFT JOIN orders o ON o.outlet_id = ot.outlet_id WHERE ot.status <> 'temporarily_closed' GROUP BY ot.outlet_id, ot.name), s AS (SELECT outlet_id, COUNT(*) AS staff_count FROM staff GROUP BY outlet_id) SELECT r.outlet_name, r.revenue, COALESCE(s.staff_count, 0) AS staff_count, r.revenue / NULLIF(s.staff_count, 0) AS revenue_per_staff_record FROM r LEFT JOIN s ON s.outlet_id = r.outlet_id ORDER BY revenue_per_staff_record DESC NULLS LAST;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "EFF-03": {
+    "sql": "SELECT ot.name AS outlet_name, s.role, COUNT(o.order_id) AS order_count FROM outlets ot JOIN staff s ON s.outlet_id = ot.outlet_id LEFT JOIN orders o ON o.staff_id = s.staff_id GROUP BY ot.name, s.role ORDER BY outlet_name, order_count DESC;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "DQ-01": {
+    "sql": "SELECT COUNT(*) FILTER (WHERE total_amount IS NULL) AS null_amounts, COUNT(*) FILTER (WHERE total_amount < 0) AS negative_amounts, COUNT(*) FILTER (WHERE total_amount = 0) AS zero_amounts, COUNT(*) FILTER (WHERE total_amount > 0) AS positive_amounts FROM orders;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "DQ-02": {
+    "sql": "SELECT detail_id, COUNT(*) AS occurrences FROM order_details GROUP BY detail_id HAVING COUNT(*) > 1 ORDER BY occurrences DESC, detail_id;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "DQ-03": {
+    "sql": "WITH a AS (SELECT SUM(total_amount) AS order_revenue FROM orders), b AS (SELECT SUM(subtotal) AS detail_subtotal_revenue FROM order_details) SELECT a.order_revenue, b.detail_subtotal_revenue, a.order_revenue - b.detail_subtotal_revenue AS difference FROM a CROSS JOIN b;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "SAL-01": {
+    "sql": "SELECT role, COUNT(*) AS staff_count, AVG(monthly_salary) AS average_monthly_salary FROM staff GROUP BY role ORDER BY role;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  },
+  "SAL-02": {
+    "sql": "SELECT ot.outlet_id, ot.name AS outlet_name, COUNT(s.staff_id) AS staff_count, AVG(s.monthly_salary) AS average_monthly_salary FROM outlets ot LEFT JOIN staff s ON s.outlet_id = ot.outlet_id GROUP BY ot.outlet_id, ot.name ORDER BY ot.name;",
+    "policy": {
+      "compare_column_names": true,
+      "order_matters": false
+    }
+  }
+}
