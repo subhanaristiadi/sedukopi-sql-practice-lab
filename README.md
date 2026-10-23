@@ -4,6 +4,7 @@ An interactive, browser-based SQL learning environment built around the Sedukopi
 
 **Live app:** https://subhanaristiadi.github.io/sedukopi-sql-practice-lab/  
 **Source code:** https://github.com/subhanaristiadi/sedukopi-sql-practice-lab
+**Dataset source:** https://ngulikdata.com/datasets/sedukopi
 
 ## Project highlights
 
