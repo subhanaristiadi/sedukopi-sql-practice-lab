@@ -35,8 +35,57 @@ function loadProgress(){try{return JSON.parse(localStorage.getItem("sedukopi-lab
 function persist(){localStorage.setItem("sedukopi-lab-progress-v1",JSON.stringify(progress));renderProgress();renderList()}
 function entry(id){if(!progress[id])progress[id]={sql:"",notes:"",completed:false,validation:null};return progress[id]}
 async function api(url,opts={}){const r=await fetch(API_BASE+url,{...opts,headers:{"Content-Type":"application/json",...(opts.headers||{})}});let d;try{d=await r.json()}catch{d={error:"Invalid server response"}}if(!r.ok)throw new Error(d.error||d.message||`HTTP ${r.status}`);return d}
-async function init(){try{const h=await fetch(API_BASE+"/health");const hd=await h.json();$("health").textContent=hd.database==="connected"?"● PostgreSQL connected":"● PostgreSQL unavailable";$("health").style.color=hd.database==="connected"?"#b8e6d8":"#ffd6a0"}catch{$("health").textContent="● Backend unavailable"}
-try{exercises=await api("/api/exercises");$("totalCount").textContent=exercises.length;const topics=[...new Set(exercises.map(x=>x.topic))];topics.forEach(t=>{const o=document.createElement("option");o.value=t;o.textContent=t;$("topicFilter").append(o)});renderList();selectExercise(exercises[0]?.id)}catch(e){$("title").textContent="Backend not available";$("question").textContent="The hosted API is unavailable. Check the Render service status and refresh after it wakes up.";$("health").textContent="● Backend unavailable"}}
+async function init(){
+  let healthOk = false;
+
+  // Health checks can be blocked by browser extensions. Do not assume
+  // the whole backend is down until the exercises endpoint is also tested.
+  try {
+    const h = await fetch(API_BASE + "/health");
+    if (!h.ok) throw new Error("Health check HTTP " + h.status);
+
+    const hd = await h.json();
+    healthOk = hd.status === "ok" && hd.database === "connected";
+
+    if (healthOk) {
+      $("health").textContent = "● PostgreSQL connected";
+      $("health").style.color = "#b8e6d8";
+    } else {
+      $("health").textContent = "● Checking API connection";
+      $("health").style.color = "#ffd6a0";
+    }
+  } catch {
+    $("health").textContent = "● Checking API connection";
+    $("health").style.color = "#ffd6a0";
+  }
+
+  try {
+    exercises = await api("/api/exercises");
+    $("totalCount").textContent = exercises.length;
+
+    const topics = [...new Set(exercises.map(x => x.topic))];
+    topics.forEach(t => {
+      const o = document.createElement("option");
+      o.value = t;
+      o.textContent = t;
+      $("topicFilter").append(o);
+    });
+
+    renderList();
+    selectExercise(exercises[0]?.id);
+
+    if (!healthOk) {
+      $("health").textContent = "● Backend connected (health check unavailable)";
+      $("health").style.color = "#b8e6d8";
+    }
+  } catch (e) {
+    $("title").textContent = "Backend not available";
+    $("question").textContent =
+      "The hosted API could not load exercises. Check the Render service and any browser extensions blocking requests.";
+    $("health").textContent = "● Backend unavailable";
+    $("health").style.color = "#ffd6a0";
+  }
+}
 function renderProgress(){const done=exercises.filter(x=>entry(x.id).completed).length;$("doneCount").textContent=done;$("totalCount").textContent=exercises.length;$("percent").textContent=exercises.length?Math.round(done/exercises.length*100)+"%":"0%"}
 function renderList(){const q=$("search").value.toLowerCase(),topic=$("topicFilter").value,diff=$("difficultyFilter").value,status=$("statusFilter").value;const list=exercises.filter(x=>(!q||(x.title+" "+x.business_question+" "+x.id).toLowerCase().includes(q))&&(!topic||x.topic===topic)&&(!diff||x.difficulty===diff)&&(!status||(status==="done")===entry(x.id).completed));$("exerciseList").replaceChildren();list.forEach(x=>{const b=document.createElement("button");b.className="exercise"+(x.id===currentId?" active":"");b.innerHTML=`<strong>${escapeHtml(x.title)} ${entry(x.id).completed?'<span class="done">✓</span>':""}</strong><small>${escapeHtml(x.id)} · ${escapeHtml(x.difficulty)}</small>`;b.onclick=()=>selectExercise(x.id);$("exerciseList").append(b)});renderProgress()}
 function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
