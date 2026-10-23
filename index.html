@@ -29,7 +29,7 @@
 </main></div>
 <script>
 const $=id=>document.getElementById(id);
-const API_BASE = "https://sedukopi-sql-practice-lab-api.onrender.com";
+const API_BASE = "https://sedukopi-sql-practice-lab.onrender.com";
 let exercises=[], currentId=null, progress=loadProgress(), lastSqlById={};
 function loadProgress(){try{return JSON.parse(localStorage.getItem("sedukopi-lab-progress-v1")||"{}")}catch{return {}}}
 function persist(){localStorage.setItem("sedukopi-lab-progress-v1",JSON.stringify(progress));renderProgress();renderList()}
