@@ -7,6 +7,10 @@ An interactive, browser-based SQL learning environment built around the Sedukopi
 
 **Dataset source:** https://ngulikdata.com/datasets/sedukopi
 
+## Project context documentation
+
+For the relationship between this web app and the broader Sedukopi SQL analytics project, verified architecture, dataset notes, functional checks, and known limitations, see [docs/WEB_APP_PROJECT_CONTEXT.md](docs/WEB_APP_PROJECT_CONTEXT.md).
+
 ## Project highlights
 
 - **47 SQL exercises** across 21 topics, from SQL fundamentals to more advanced analysis.
